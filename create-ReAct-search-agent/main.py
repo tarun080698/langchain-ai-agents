@@ -6,7 +6,10 @@ from langchain.tools import tool
 from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from tavily import TavilyClient
+from langchain_tavily import TavilySearch
 
+
+# our custom tool to search the web using Tavily API and other tools to get current time and logged in user
 tavily = TavilyClient()
 
 
@@ -53,14 +56,15 @@ def get_current_logged_in_user() -> str:
 
 
 llm = ChatOpenAI()
-tools = [search, get_current_time, get_current_logged_in_user]
+# tools = [search, get_current_time, get_current_logged_in_user]
+tools = [TavilySearch()]
 
 agent = create_agent(model=llm, tools=tools)
 
 
 def main():
     print("Hello from create-react-search-agent!")
-    result = agent.invoke({"messages": [HumanMessage(content="find me the top 3 best courses on Udemy to learn Generative Ai and get the links to those courses from udemy only, no external links")]})
+    result = agent.invoke({"messages": [HumanMessage(content="find me the top 3 best courses on Udemy to learn Generative AI and get the links to those courses from udemy only, no external links")]})
     print(f"Agent result: {result}")
 
 
