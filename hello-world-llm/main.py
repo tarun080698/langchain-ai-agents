@@ -1,0 +1,40 @@
+from dotenv import load_dotenv
+import os
+from langchain_core.prompts import PromptTemplate
+
+
+from langchain_openai import ChatOpenAI
+
+
+load_dotenv()
+
+
+
+def main():
+    print("Hello from langchain-course, Tarun!")
+    information = """
+LangChain is an open source framework with a pre-built agent architecture and integrations for any model or tool — so you can build agents that adapt as fast as the ecosystem evolves
+
+LangChain is the easiest way to start building agents and applications powered by LLMs. With under 10 lines of code, you can connect to OpenAI, Anthropic, Google, and more. LangChain provides a pre-built agent architecture and model integrations to help you get started quickly and seamlessly incorporate LLMs into your agents and applications.
+We recommend you use LangChain if you want to quickly build agents and autonomous applications. Use LangGraph, our low-level agent orchestration framework and runtime, when you have more advanced needs that require a combination of deterministic and agentic workflows, heavy customization, and carefully controlled latency.
+LangChain agents are built on top of LangGraph in order to provide durable execution, streaming, human-in-the-loop, persistence, and more. You do not need to know LangGraph for basic LangChain agent usage.
+"""
+    learning_template = """
+    using the information {information}, write a paragraph about how to learn:
+1. Introduction to LangChain and LangGraph
+2. Setting up the environment and installing dependencies
+"""
+
+    template_prompt = PromptTemplate(
+        input_variables=["information"], template=learning_template)
+
+    llm = ChatOpenAI(model="gpt-5", temperature=0)
+    chain = template_prompt | llm
+
+    response = chain.invoke(input={"information": information})
+
+    print(response.content)
+
+
+if __name__ == "__main__":
+    main()
